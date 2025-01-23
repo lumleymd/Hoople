@@ -1,0 +1,26 @@
+.App {
+  text-align: center;
+}
+
+
+
+.App-header {
+  background-color: #282c34;
+  max-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.teamCard{
+  max-height: 200px;
+  max-width: 700px;
+}
+
+.teamCard >.TeamLogo{
+  max-height: 200px;
+  max-width: 200px;
+}
