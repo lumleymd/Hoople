@@ -46,16 +46,17 @@ export async function getPlayer() {
                 mates: []
             })
 
-            for (let k = 0; k < player.teams.length; k++) {
-                let tea = player.teams[k];
+       
+        }
+        for (let k = 0; k < player.teams.length; k++) {
+            let tea = player.teams[k];
+            
+            const teammatesRequest = await session.run(`MATCH  (a:Athlete )-[r:PLAYED_ON ]->(t:Team) WHERE ID(t)=${tea.id} AND r.year ="${tea.year}" RETURN a`)
 
-                const teammatesRequest = await session.run(`MATCH  (a:Athlete )-[r:PLAYED_ON {year:"${tea.year}"}]->(t:Team) WHERE ID(t)=${tea.id} RETURN a`)
-
-                teammatesRequest.records.forEach((mate) => {
-                    let tm = mate._fields
-                    tea.mates.push(tm[0].properties.name)
-                })
-            }
+            teammatesRequest.records.forEach((mate) => {
+                let tm = mate._fields
+                tea.mates.push(tm[0].properties.name)
+            })
         }
 
         FileSystem.writeFile('../src/staticFiles/player.json', JSON.stringify(player), (error) => {

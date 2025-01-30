@@ -1,22 +1,34 @@
 import { ITeamRelationship } from "./gameModel.mode";
 
 type Props = {
-    team: ITeamRelationship;
-    unlocked: boolean
+    team: ITeamRelationship
     }
-export function TeamCard({team,unlocked}:Props){
+export function TeamCard({team}:Props){
     return(
       
             <>
             <td className="flex ">
             <div className="w-1/6"></div>
+            {team.revealed?
             <img className="TeamLogo w-1/5" src={team.logo} alt={team.name}></img>
-           
+            :
+            <img className="TeamLogo w-1/5 blur-2xl" src={team.logo} alt={team.name}></img>
+}
           
                 <ul className="pl-10 pt-5 text-left w-2/5">
+                    {team.revealed?
+                    <>
                     <li>{team.name}</li>
                     <li>{team.year}</li>
                     <li>{team.mates[0]}</li>
+                    </>
+                    :
+                    <>
+                    <li className="blur-sm">xxxxxxxxx xxxxxxxx</li>
+                    <li>{team.year}</li>
+            
+                    </>
+}
                 </ul>
                 
             
