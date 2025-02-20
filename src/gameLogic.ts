@@ -35,6 +35,19 @@ export class gameLogic{
               })];
               break;
             default:
+                player.teams = [...player.teams.map((t: ITeamRelationship)=>{
+                    
+                   if(!t.revealed){
+                        t.mates.forEach((m:string)=>{
+                            if(m === guess){
+                                t.revealed = true;
+                            }
+                        })
+                        if(t.revealed){t.mates = [guess]}
+                    }
+                   
+                    return {...t}
+                })];
               return player
           }
           console.log(player)

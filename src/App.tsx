@@ -37,9 +37,17 @@ function App() {
     <div className="App content-center">
       <AppHeader></AppHeader>
 
+
       <div className="items-center justify-center h-screen bg-blue-500 bg-opacity-5">
+
+        <p>
+          A simple game to see if you know ball! 
+          Every day we choose a different NBA player to test you knowledge on.
+          Below is a list of all the teams that player has been on, only blurred.
+          If you guess the player you win! If you guess a teammate, you unlock that team, as a hint. Good luck!
+        </p>
       <form className="max-w-sm mx-auto">
-            <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+            <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a player</label>
             <select onChange={handlePlayerSelect} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <option disabled selected>Guess a player</option>
               
@@ -52,8 +60,7 @@ function App() {
               
             </select>
           </form>
-        team: {player.teams[0] ?  <a>bomb: {player.teams[0].revealed}</a>:null}  
-          
+
 
       <div className="flex tems-center justify-center">
  
