@@ -1,15 +1,16 @@
 //headshot https://a.espncdn.com/combiner/i?img=/i/headshots/nba/players/full/${espnId}.png&w=350&h=254
-import { IPlayer, ITeamRelationship } from "./gameModel.mode";
+import { IPlayer, ITeamRelationship,gameStatus } from "./gameModel.mode";
 
 
 const json = require('./staticFiles/player.json')
 const jsonPlayers = require('./staticFiles/allPlayers.json')
 
 
-
 export class gameLogic{
 
     players:string[];
+    status: gameStatus = gameStatus.Playing;
+
 
     constructor(){
         this.players = jsonPlayers;
@@ -28,6 +29,7 @@ export class gameLogic{
     
             case guess:
               console.log("You win!")
+              this.status = gameStatus.Won;
               player.teams = [...player.teams.map((t: ITeamRelationship)=>{
                   t.revealed = true;
                   if(t.mates.length > 1){t.mates=[]}

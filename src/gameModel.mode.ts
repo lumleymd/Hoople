@@ -22,3 +22,9 @@ export interface IPlayer{
     espnId:string
     teams:ITeamRelationship[];
 }
+
+export enum gameStatus{
+    Playing,
+    Won,
+    Lost
+}

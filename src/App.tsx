@@ -1,11 +1,11 @@
-import React, { useEffect,useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import './App.css';
 import { AppHeader } from './header';
 import { gameLogic } from './gameLogic';
 import { TeamCard } from './teamCard';
 import { useState } from 'react';
-import { IPlayer, ITeamRelationship } from "./gameModel.mode";
-
+import { IPlayer, ITeamRelationship, gameStatus } from "./gameModel.mode";
+import { WinnerCard } from './winner';
 
 
 
@@ -14,24 +14,25 @@ function App() {
   const Logic = new gameLogic();
 
 
-  const [player,setPlayer]= useState<IPlayer>(Logic.getPlayer());
+  const [player, setPlayer] = useState<IPlayer>(Logic.getPlayer());
+  const [status, setStatus] = useState<gameStatus>(Logic.status);
 
 
 
-  const handlePlayerSelect =(e: React.ChangeEvent<HTMLSelectElement>) => {
- 
-    let newPlayer = Logic.guessPlayer(e.target.value,player);
-   
-    setPlayer({...newPlayer})
+  const handlePlayerSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
 
-    
-}
+    let newPlayer = Logic.guessPlayer(e.target.value, player);
+    setStatus(Logic.status);
+    setPlayer({ ...newPlayer })
 
-  useEffect(()=>{
+
+  }
+
+  useEffect(() => {
     console.log("player changed")
 
     console.log(player)
-  },[player])
+  }, [player])
 
   return (
     <div className="App content-center">
@@ -41,48 +42,56 @@ function App() {
       <div className="items-center justify-center h-screen bg-blue-500 bg-opacity-5">
 
         <p>
-          A simple game to see if you know ball! 
+          A simple game to see if you know ball!
           Every day we choose a different NBA player to test you knowledge on.
           Below is a list of all the teams that player has been on, only blurred.
           If you guess the player you win! If you guess a teammate, you unlock that team, as a hint. Good luck!
         </p>
-      <form className="max-w-sm mx-auto">
-            <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a player</label>
-            <select onChange={handlePlayerSelect} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              <option disabled selected>Guess a player</option>
-              
-          {Logic.players.map((p) => {
-            return (
-              <option >{p}</option>
-            )
-          })}
 
-              
-            </select>
-          </form>
+        {status === gameStatus.Lost || status === gameStatus.Won ?
+          <WinnerCard player={player} status={status}></WinnerCard>
+          :
+          null
+        }
 
 
-      <div className="flex tems-center justify-center">
- 
-        <table >
-          <tr className="border border-gray-300 px-4 py-2">
-            <th className="w-1/2">Team</th>
-            <th className="w-1/4">Record</th>
-            <th className="w-1/4">Stats</th>
-          </tr>
+        <form className="max-w-sm mx-auto">
+          <label htmlFor="countries" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a player</label>
+          <select onChange={handlePlayerSelect} id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option disabled selected>Guess a player</option>
+
+            {Logic.players.map((p) => {
+              return (
+                <option >{p}</option>
+              )
+            })}
 
 
-          {player.teams.map((t) => {
-            return (
-              <tr className="border border-gray-300 px-4 py-2"><TeamCard team={t} ></TeamCard> </tr>
-            )
-          })}
-        
-        </table>
+          </select>
+        </form>
+
+
+        <div className="flex tems-center justify-center">
+
+          <table >
+            <tr className="border border-gray-300 px-4 py-2">
+              <th className="w-1/2">Team</th>
+              <th className="w-1/4">Record</th>
+              <th className="w-1/4">Stats</th>
+            </tr>
+
+
+            {player.teams.map((t) => {
+              return (
+                <tr className="border border-gray-300 px-4 py-2"><TeamCard team={t} ></TeamCard> </tr>
+              )
+            })}
+
+          </table>
+        </div>
+
+
       </div>
-
-
-    </div>
     </div>
   );
 }
