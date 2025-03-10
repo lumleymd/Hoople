@@ -6,9 +6,10 @@ import { TeamCard } from './teamCard';
 import { useState } from 'react';
 import { IPlayer, ITeamRelationship, gameStatus } from "./gameModel.mode";
 import { WinnerCard } from './winner';
-import Select, {SingleValue,ActionMeta} from 'react-select';
+import Select, { SingleValue, ActionMeta } from 'react-select';
 
 
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 function App() {
 
@@ -18,11 +19,20 @@ function App() {
   const [player, setPlayer] = useState<IPlayer>(Logic.getPlayer());
   const [status, setStatus] = useState<gameStatus>(Logic.status);
 
+  let effectRan: boolean = false;
+  useEffect(() => {
+    if (!effectRan) {
+      let newPlayer = Logic.guessPlayer("", player);
+      setStatus(Logic.status);
+      setPlayer({ ...newPlayer })
+      effectRan = true;
+    }
 
+  }, [])
 
   const handlePlayerSelect = (newValue: SingleValue<{ label: string; value: string; }>, actionMeta: ActionMeta<{ label: string; value: string; }>) => {
 
-    if(newValue){
+    if (newValue) {
       let newPlayer = Logic.guessPlayer(newValue.value, player);
       setStatus(Logic.status);
       setPlayer({ ...newPlayer })
@@ -45,7 +55,18 @@ function App() {
 
       <div className="items-center justify-center h-screen bg-blue-500 bg-opacity-5">
 
-        <p>
+
+        <h2 className="titleDiv">
+          <div className='BasketballImgContainer'>
+            <img className="BasketballImg" width={40} alt="basketball" src="basketball.png"></img>
+
+          </div>
+
+
+
+          Hoople / {monthNames[(new Date()).getMonth()] + " " + (new Date()).getDate()}
+        </h2>
+        <p className="ExplainP">
           A simple game to see if you know ball!
           Every day we choose a different NBA player to test you knowledge on.
           Below is a list of all the teams that player has been on, only blurred.
@@ -62,16 +83,15 @@ function App() {
         <form className="max-w-sm mx-auto">
 
 
-      
 
-          <label htmlFor="playerDrop" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a player</label>
-          <Select   onChange={handlePlayerSelect} id="playerDrop" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        options= {Logic.players.map((p) => {
-          return (
-            {label: p, value: p}
-          )
-        })}
-      />
+
+          <Select placeholder="Select a Player" onChange={handlePlayerSelect} id="playerDrop" className=" mb-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            options={Logic.players.map((p) => {
+              return (
+                { label: p, value: p }
+              )
+            })}
+          />
         </form>
 
 
